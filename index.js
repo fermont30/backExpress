@@ -1,3 +1,4 @@
+require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const dotenv = require('dotenv');
@@ -15,6 +16,7 @@ app.use(express.json());
 // Rutas
 app.use('/api/auth', authRoutes);
 app.use('/api/tasks', taskRoutes);
+
 
 // Sincronizar DB y arrancar servidor
 sequelize.sync().then(() => {

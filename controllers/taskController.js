@@ -1,4 +1,7 @@
+const e = require('cors');
 const Task = require('../models/Task');
+
+
 
 exports.createTask = async (req, res) => {
   try {
@@ -11,14 +14,16 @@ exports.createTask = async (req, res) => {
 
 exports.getTasks = async (req, res) => {
   try {
-    const tasks = await Task.findAll({ where: { UserId: req.userId } });
+    const tasks = await Task.findAll(
+      // { where: { UserId: req.userId } }
+    );
     res.json(tasks);
   } catch (err) {
     res.status(500).json({ error: 'Error al obtener tareas' });
   }
 };
 
-exports.getTaskId = async (req, res) => {
+exports.getTaskById = async (req, res) => {
   try {
     const task = await Task.findByPk(req.params.id);
     if (!task) {
@@ -40,5 +45,18 @@ exports.updateTask = async (req, res) => {
     res.json(task);
   } catch (err) {
     res.status(400).json({ error: 'Error al actualizar tarea' });
-  }
+  } 
 }
+
+ exports.deleteTask = async (req, res) => {
+    try {
+      const task = await Task.findByPk(req.params.id);
+      if (!task) {
+        return res.status(404).json({ error: 'Tarea no encontrada' });
+      }
+      await task.destroy();
+      res.json({ message: 'Tarea eliminada' });
+    } catch (err) {
+      res.status(500).json({ error: 'Error al eliminar tarea' });
+    }
+  }
